@@ -13,22 +13,27 @@ class Hand:
         else:
             self.cards.add(deck.cards)   
           
-    def update_positions(self, screen_width):
-        card_top = 550
-        card_gap = 25
+    def adjust_card_position(self, screen_width):
+        card_top = 600
         num_cards = len(self.cards)
         
         # Calculate the initial left position relative to the center of the screen
-        total_width = (num_cards * 150) + (num_cards - 1) * card_gap
+        total_width = (num_cards * 150) + (num_cards - 1)
         start_x = (screen_width - total_width) // 2
 
         current_x = start_x
-        for card in self.cards:
+        for i, card in enumerate(self.cards):
             card.rect.left = current_x
-            card.rect.top = card_top
+            if i % 2 == 0:
+                card.rect.top = card_top - 5
+            else:
+                card.rect.top = card_top
 
             # Adding the gap between the cards
-            current_x += card.rect.width + card_gap
+            current_x += card.rect.width
+
+
+
 
 
 
