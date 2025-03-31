@@ -1,6 +1,6 @@
 import pygame
-from card import Card
 import random
+from card import Card
 
 class Deck:
     
@@ -17,11 +17,17 @@ class Deck:
             card = Card(img)
             self.cards.add(card)
 
-    
-    def shuffle_cards(self):
+    def shuffle_deck(self):
         shuffled_cards = list(self.cards)
         random.shuffle(shuffled_cards)
         self.cards = pygame.sprite.Group(shuffled_cards)
+
+    def draw_card(self):
+        if self.cards:
+            card = random.choice(list(self.cards))
+            return card
+        else:
+            return None
 
     def remove_card(self, card):
         self.cards.remove(card)

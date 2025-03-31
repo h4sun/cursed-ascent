@@ -2,43 +2,48 @@ import pygame
 from deck import Deck
 from hand import Hand
 
-pygame.init()
+class Game:
+    
+    def __init__(self):
+        pygame.init()
 
-# Ekranı oluştur
-screen = pygame.display.set_mode((1280, 720))
-clock = pygame.time.Clock()
+        SCREEN_SIZE = SCREEN_WIDTH, SCREEN_HEIGHT = (1280, 720)
+        hand_size = 5
 
-deck = Deck()
-deck.shuffle_cards()
+        self.screen = pygame.display.set_mode(SCREEN_SIZE)
+        self.clock = pygame.time.Clock()
 
-hand = Hand()
+        self.deck = Deck()
+        self.deck.shuffle_deck()
 
-max_hand = 2
-hand_size = 0
+        self.hand = Hand()
+        self.hand.draw_hand(self.deck, hand_size)
+        self.hand.update_positions(SCREEN_WIDTH)
 
-print(deck.cards)
-
-hand.draw_hand(deck, max_hand)
-
-print(deck.cards)
-
-running = True
-while running:
-    screen.fill((0, 0, 0))  # Arka planı siyah yap
-
-    mouse_pos = mouse_x, mouse_y = pygame.mouse.get_pos()
-
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
+    def quit(self):
+        pygame.quit()
 
 
-    for i, card in enumerate(hand.cards):
-        screen.blit(card.image, (250 + i * 150, 550))
+    def draw(self):
+        for i, card in enumerate(self.hand.cards):      
+            self.screen.blit(card.image, card.rect)
+
+    def run(self):
+        running = True
+        while running:
+
+            # Pool Events
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    running = False
+
+            self.draw()
+
+            pygame.display.flip()
+            self.clock.tick(60)
 
 
 
-    pygame.display.flip()
-    clock.tick(60)
-
-pygame.quit()
+game = Game()
+if __name__ == "__main__":
+    game.run()
