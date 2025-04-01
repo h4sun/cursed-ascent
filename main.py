@@ -1,15 +1,24 @@
 import pygame
 from deck import Deck
 from hand import Hand
-from card import Card
+from enemy import Enemy
+from character import Character
 
 class Game:
 
     def __init__(self):
         pygame.init()
-        SCREEN_SIZE = SCREEN_WIDTH, SCREEN_HEIGHT = (1280, 720)
-        self.screen = pygame.display.set_mode(SCREEN_SIZE)
+        self.SCREEN_SIZE = self.SCREEN_WIDTH, self.SCREEN_HEIGHT = (1280, 720)
+        self.screen = pygame.display.set_mode(self.SCREEN_SIZE)
         self.clock = pygame.time.Clock()
+
+        # Initialize character
+        self.player = Character()
+        self.player.adjust_player_position(self.SCREEN_HEIGHT)
+
+        # Initialize enemy
+        self.enemy = Enemy()
+        self.enemy.adjust_enemy_position(self.SCREEN_HEIGHT)
 
         # Initialize deck
         self.deck = Deck()
@@ -20,33 +29,18 @@ class Game:
         self.hand_size = 5
         self.hand = Hand()
         self.hand.draw_hand(self.deck, self.hand_size)
-        self.hand.adjust_card_position(SCREEN_WIDTH)
-
 
     def quit(self):
         pygame.quit()
 
     def draw(self):
-        self.hand.cards.draw(self.screen)
-
-    def enlarge_card(self):
-        mouse_x, mouse_y = pygame.mouse.get_pos()
-
-        card_top = 600
-        for i, card in enumerate(self.hand.cards):
-            if (card.rect.left < mouse_x < card.rect.left + card.rect.width and card.rect.top < mouse_y < card.rect.top + card.rect.height):
-                if card.rect.top < 601 and card.rect.top > 500:
-                    card.rect.top -= 100
-            else:
-                if i % 2 == 0:
-                    card.rect.top = card_top - 5
-                else:
-                    card.rect.top = card_top
+        self.screen.blit(self.player.image, self.player.rect)
+        self.screen.blit(self.enemy.image, self.enemy.rect)
+        self.hand.draw(self.screen, self.SCREEN_WIDTH)
 
     def run(self):
         running = True
         while running:
-
             self.screen.fill((0, 0, 0))
 
             # Pool Events
@@ -54,7 +48,9 @@ class Game:
                 if event.type == pygame.QUIT:
                     running = False
 
-            self.enlarge_card()
+                self.hand.select_card(event)
+
+
             self.draw()
 
             pygame.display.flip()
