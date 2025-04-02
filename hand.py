@@ -30,36 +30,58 @@ class Hand:
                 card.rect.top = card_top
             else:
                 if card.rect.top > 500:
-                    print(card.rect.top)
                     card.rect.top -= 100
                 
 
-        # Enlarge the card when the mouse on the card
-        mouse_pos = pygame.mouse.get_pos()
+        #if not self.__is_any_card_selected():
+        mouse_pos = mouse_x, mouse_y = pygame.mouse.get_pos()
+
+        # If the card is not selected give some enlarging when you hovering the mouse on the cards if the card is selected move the card with the mouse.
+        # Kart secili değilken üstüne geldiğinde kartı y ekseninde biraz büyüt eğer kart secili ise mousela birlikte kartı hareket ettir.
+
+        """selected_card = self.__is_any_card_selected()
+        if selected_card == None:
+            if card.rect.collidepoint(mouse_pos):
+                card.rect.top -= 100"""
+        
+
+
         for card in self.cards:
             if not card.selected:
                 if card.rect.collidepoint(mouse_pos):
                     card.rect.top -= 100
+            else:
+                card.rect.left = mouse_x - (card.rect.width / 2)
+                card.rect.top = mouse_y - (card.rect.height / 2)
 
-
+        
         # Draw
+
         self.cards.draw(surface)
 
     def select_card(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
             mouse_pos = pygame.mouse.get_pos()
-
+            
+            is_any_card_selected = self.__is_any_card_selected()
             for card in self.cards:
-                if card.rect.collidepoint(mouse_pos):
-                    card.selected = not card.selected
-                    if card.selected:
-                        card.image.fill("red")
-                    else:
-                        card.image = card.original_image.copy()
-                    print(f"Card selected: {card.selected}")
+                if card.rect.collidepoint(mouse_pos) and is_any_card_selected != None:
+                    card.selected = True
+                    card.image.fill("red")
+                    is_any_card_selected.selected = False
+                    is_any_card_selected.image = is_any_card_selected.original_image.copy()
+            
+                elif card.rect.collidepoint(mouse_pos) and is_any_card_selected == None:
+                    card.selected = True
+                    card.image.fill("red")
 
-
-
+    
+    def __is_any_card_selected(self):
+        for card in self.cards:
+            if card.selected:
+                return card
+        else:
+            return None
         
 
 
