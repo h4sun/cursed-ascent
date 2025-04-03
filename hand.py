@@ -1,4 +1,6 @@
 import pygame
+from character import Character
+from enemy import Enemy
 
 class Hand:
 
@@ -6,17 +8,22 @@ class Hand:
         self.hand_cards = pygame.sprite.Group()
         self.hand_copy = []
 
+        self.player = Character()
+        self.enemy = Enemy()
+
 
     def draw_hand(self, deck, hand_size):
-        if (len(deck.deck_cards) > hand_size):
+        if (len(deck.deck_cards) >= hand_size):
             while len(self.hand_cards) < hand_size and deck.deck_cards:
-                card = deck.draw_card_from_deck()
+                card = deck.draw_card()
                 self.hand_cards.add(card)
+                deck.remove_card(card) # Remove the card we draw from the deck
         else:
             self.hand_cards.add(deck.deck_cards) # If the hand_size bigger than the deck we simply add all deck to hand 
+            deck.remove_card(self.hand_cards) # Remove the all cards we draw
 
         for card in self.hand_cards:
-            self.hand_copy.append(card)
+            self.hand_copy.append(card) # Copy hand it is solve the topmost card when the select
           
 
     def draw(self, surface, screen_width):
@@ -48,8 +55,6 @@ class Hand:
             get_selected_card.rect.left = mouse_x - (get_selected_card.rect.width / 2)
             get_selected_card.rect.top = mouse_y - (get_selected_card.rect.height / 2)
 
-
-
         self.hand_cards.draw(surface)
 
     def select_card(self, event):
@@ -67,8 +72,21 @@ class Hand:
             else:
                 self.hand_cards.empty()
                 self.hand_cards = pygame.sprite.Group(self.hand_copy)
+                self.check_card_collide(get_selected_card, self.player, self.enemy)
                 get_selected_card.selected = False
                 get_selected_card.image = get_selected_card.original_image.copy()
+
+
+    def check_card_collide(self, card, player, enemy):
+        if card.type == "attack":
+            if card.rect.colliderect(enemy.rect):
+                self.hand_cards.remove(card)
+                self.hand_copy.remove(card)
+        elif card.type == "defense":
+            if card.rect.colliderect(player.rect):
+                self.hand_cards.remove(card)
+                self.hand_copy.remove(card)
+
 
 
     def __get_selected_card(self):
