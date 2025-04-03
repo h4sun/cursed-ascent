@@ -14,11 +14,9 @@ class Game:
 
         # Initialize character
         self.player = Character()
-        self.player.adjust_player_position(self.SCREEN_HEIGHT)
 
         # Initialize enemy
         self.enemy = Enemy()
-        self.enemy.adjust_enemy_position(self.SCREEN_HEIGHT)
 
         # Initialize deck
         self.deck = Deck()
@@ -49,7 +47,6 @@ class Game:
                     running = False
 
                 self.hand.select_card(event)
-
 
             self.draw()
 
