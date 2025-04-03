@@ -5,25 +5,25 @@ from card import Cards
 class Deck:
     
     def __init__(self):
-        self.cards = Cards().cards
+        self.deck_cards = Cards().cards
 
     def build_deck(self):
-        self.cards.add()
+        self.deck_cards.add()
 
     def shuffle_deck(self):
-        shuffled_cards = list(self.cards)
+        shuffled_cards = list(self.deck_cards)
         random.shuffle(shuffled_cards)
-        self.cards = pygame.sprite.Group(shuffled_cards)
+        self.deck_cards = pygame.sprite.Group(shuffled_cards)
 
     def draw_card_from_deck(self):
-        if self.cards:
-            card = random.choice(list(self.cards))
+        if self.deck_cards:
+            card = random.choice(list(self.deck_cards))
             return card
         else:
             return None
 
     def remove_card(self, card):
-        self.cards.remove(card)
+        self.deck_cards.remove(card)
 
 
 
