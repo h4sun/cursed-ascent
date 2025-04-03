@@ -15,7 +15,7 @@ class Deck:
         random.shuffle(shuffled_cards)
         self.deck_cards = pygame.sprite.Group(shuffled_cards)
 
-    def draw_card_from_deck(self):
+    def draw_card(self):
         if self.deck_cards:
             card = random.choice(list(self.deck_cards))
             return card
