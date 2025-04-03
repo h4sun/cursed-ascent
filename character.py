@@ -6,7 +6,9 @@ class Character(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__
         self.image = pygame.image.load("assets/characters/mage.png").convert()
         self.rect = self.image.get_rect()
-
+        self.adjust_player_position(720)
+        self.hp = 100
+        self.armor = 0
 
     def adjust_player_position(self, screen_height):
         self.rect.top = (screen_height - self.rect.height) // 2
