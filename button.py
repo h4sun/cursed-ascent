@@ -15,6 +15,4 @@ class Button():
 
             if self.rect.collidepoint(mouse_pos):
                 return True
-
-
-
+        
