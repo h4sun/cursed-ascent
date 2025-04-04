@@ -11,7 +11,7 @@ class Hand:
         self.released_card = False 
 
     def draw_hand(self, deck):
-        while len(self.hand_cards) < self.hand_size and deck.deck_cards:
+        while len(self.hand_cards) < self.hand_size:
             card = deck.draw_card()
             self.hand_cards.add(card)
             deck.remove_card(card) # Remove the card we draw from the deck
