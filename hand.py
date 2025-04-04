@@ -4,21 +4,19 @@ class Hand:
 
     def __init__(self,):
         self.hand_cards = pygame.sprite.Group()
+        self.hand_size = 5
         self.hand_copy = []
 
         self.selected_card = None
         self.released_card = False 
 
-    def draw_hand(self, deck, hand_size):
-        if (len(deck.deck_cards) >= hand_size):
-            while len(self.hand_cards) < hand_size and deck.deck_cards:
-                card = deck.draw_card()
-                self.hand_cards.add(card)
-                deck.remove_card(card) # Remove the card we draw from the deck
-        else:
-            self.hand_cards.add(deck.deck_cards) # If the hand_size bigger than the deck we simply add all deck to hand 
-            deck.remove_card(self.hand_cards) # Remove the all cards we draw
+    def draw_hand(self, deck):
+        while len(self.hand_cards) < self.hand_size and deck.deck_cards:
+            card = deck.draw_card()
+            self.hand_cards.add(card)
+            deck.remove_card(card) # Remove the card we draw from the deck
 
+        self.hand_copy = []
         for card in self.hand_cards:
             self.hand_copy.append(card) # Copy hand it is solve the topmost card when the select
           
@@ -67,8 +65,6 @@ class Hand:
             #self.selected_card.image = self.selected_card.original_image.copy()
             #print(self.selected_card.rect)
             return True # We releasing the card
-
-
 
     # Realease the card and return the realesed card
     def release_card(self):
