@@ -2,7 +2,7 @@ import pygame
 from deck import Deck
 from hand import Hand
 from enemy import Enemy
-from character import Character
+from player import Player
 
 class Game:
 
@@ -12,8 +12,8 @@ class Game:
         self.screen = pygame.display.set_mode(self.SCREEN_SIZE)
         self.clock = pygame.time.Clock()
 
-        # Initialize character
-        self.player = Character()
+        # Initialize player
+        self.player = Player()
 
         # Initialize enemy
         self.enemy = Enemy()
@@ -36,6 +36,26 @@ class Game:
         self.screen.blit(self.enemy.image, self.enemy.rect)
         self.hand.draw(self.screen, self.SCREEN_WIDTH)
 
+
+    def handle_card_events(self, event):
+        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+            if self.hand.select_card():
+                released_card = self.hand.release_card()
+                if released_card:
+                    if released_card.rect.colliderect(self.player.rect) and released_card.type == "defense":
+                        self.apply_card_effects(released_card, self.player)
+                    elif released_card.rect.colliderect(self.enemy.rect) and released_card.type == "attack":
+                        self.apply_card_effects(released_card, self.enemy)
+                
+        
+    def apply_card_effects(self, card, target):
+        
+        self.hand.hand_cards.remove(card)
+        self.hand.hand_copy.remove(card)
+
+        print(f"We applied the card, type is {card.type}")
+
+
     def run(self):
         running = True
         while running:
@@ -46,7 +66,7 @@ class Game:
                 if event.type == pygame.QUIT:
                     running = False
 
-                self.hand.select_card(event)
+                self.handle_card_events(event)
 
             self.draw()
 
