@@ -4,8 +4,8 @@ from card import Cards
 
 class Deck:
     
-    def __init__(self):
-        self.deck_cards = Cards().cards
+    def __init__(self, cards):
+        self.deck_cards = cards
 
     def build_deck(self):
         self.deck_cards.add()
