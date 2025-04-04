@@ -7,7 +7,10 @@ class Player(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__
         self.image = pygame.image.load("assets/characters/mage.png").convert()
         self.rect = self.image.get_rect()
+        self.turn = True
         self.adjust_player_position(720)
+
+        # Player Stats
         self.hp = 100
         self.armor = 0
 
