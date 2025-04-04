@@ -3,13 +3,12 @@ import pygame
 
 class Card(pygame.sprite.Sprite):
 
-    def __init__(self, image_path, type):
+    def __init__(self, image_path, type = None):
         pygame.sprite.Sprite.__init__(self)
         self.original_image = pygame.image.load(image_path).convert()
         self.image = pygame.image.load(image_path).convert()
         self.type = type
         self.rect = self.image.get_rect()
-
 
 
 class Cards:
@@ -20,9 +19,10 @@ class Cards:
     def load_cards(self):
         card_images = os.listdir(path="assets/cards")
 
-        for index, image in enumerate(card_images):
-            if index % 2 == 0:
-                image = Card(f"assets/cards/{image}", "attack")
+        for image in card_images:
+            card = Card(f"assets/cards/{image}")
+            if image.endswith("attack.png"):
+                card.type = "attack"
             else:
-                image = Card(f"assets/cards/{image}", "defense")
-            self.cards.add(image)
+                card.type = "defense"
+            self.cards.add(card)
