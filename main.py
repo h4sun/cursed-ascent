@@ -25,7 +25,6 @@ class Game:
 
         # Initialize deck
         self.deck = Deck(self.cards.cards)
-        self.deck.build_deck()
         self.deck.shuffle_deck()
 
         # Initialize buttons
@@ -35,17 +34,18 @@ class Game:
         self.hand = Hand()
         self.hand.draw_hand(self.deck)
 
-    def quit(self):
-        pygame.quit()
-
     def draw(self):
-        self.screen.blit(self.button.image, self.button.rect)
-        self.screen.blit(self.player.image, self.player.rect)
-        self.screen.blit(self.enemy.image, self.enemy.rect)
+        if self.enemy.live:
+            self.screen.blit(self.enemy.image, self.enemy.rect)
+        
+        if self.player.live:
+            self.screen.blit(self.player.image, self.player.rect)
 
         if self.player.turn:
             self.hand.draw(self.screen, self.SCREEN_WIDTH)
 
+            
+        self.screen.blit(self.button.image, self.button.rect)
 
     def handle_button_events(self, event):
         clicked = self.button.click(event)
@@ -55,41 +55,36 @@ class Game:
             self.player.turn = not self.player.turn
             self.enemy.turn = not self.enemy.turn
 
-
-    def enemy_logic(self):
-        if self.enemy.turn:
-            self.enemy.attack(self.player)
-            print(self.player.hp)
-            self.enemy.turn = not self.enemy.turn
-            self.player.turn = not self.player.turn
-
-
     def handle_card_events(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1 and self.player.turn == True:
             if self.hand.select_card():
                 released_card = self.hand.release_card()
                 if released_card:
-                    if released_card.rect.colliderect(self.player.rect) and released_card.type == "defense":
+                    if released_card.rect.colliderect(self.player.rect) and self.player.live:
                         self.apply_card_effects(released_card, self.player)
-                    elif released_card.rect.colliderect(self.enemy.rect) and released_card.type == "attack":
+                    elif released_card.rect.colliderect(self.enemy.rect) and self.enemy.live:
                         self.apply_card_effects(released_card, self.enemy)
-                
-        
+
+
     def apply_card_effects(self, card, target):
-        
         if card.type == "attack":
             target.hp -= 5
-            print(self.enemy.hp)
         
         elif card.type == "defense":
             target.armor += 5
 
-
-
         self.hand.hand_cards.remove(card)
         self.hand.hand_copy.remove(card)
 
-        #print(f"We applied the card, type is {card.type}")
+    def enemy_logic(self):
+        if self.enemy.turn and self.enemy.live:
+            self.enemy.attack(self.player)
+            self.enemy.turn = not self.enemy.turn
+            self.player.turn = not self.player.turn
+
+        else:
+            self.player.turn = True
+
 
     def run(self):
         running = True
@@ -104,11 +99,15 @@ class Game:
                 self.handle_card_events(event)
                 self.handle_button_events(event)
 
+
             self.enemy_logic()
             self.draw()
 
             pygame.display.flip()
             self.clock.tick(60)
+
+
+        pygame.quit()
 
 
 
