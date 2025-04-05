@@ -21,13 +21,13 @@ class Deck:
             card = self.deck_cards.sprites()[0]
             return card
         else:
+            random.shuffle(self.card_graveyard)
             self.deck_cards = pygame.sprite.Group(self.card_graveyard) # Hangi kart en üste geliyor bak ilk giren mi yoksa son giren mi
             self.card_graveyard = []
             card = self.deck_cards.sprites()[0]
             return card
 
     def remove_card(self, card):
-        self.card_graveyard.append(card)
         self.deck_cards.remove(card)
 
 
