@@ -1,3 +1,4 @@
+import sys
 import pygame
 from deck import Deck
 from hand import Hand
@@ -105,17 +106,15 @@ class Game:
 
     def quit(self):
         pygame.quit()
+        sys.exit()
 
     def main_menu(self):
-        running = True
-        while running:
+        while True:
 
             self.screen.fill((0, 0, 0))
 
             self.play_button = Button("assets/buttons/play.png", self.SCREEN_WIDTH / 2, self.SCREEN_HEIGHT / 2)
             self.quit_button = Button("assets/buttons/quit.png", self.SCREEN_WIDTH / 2, self.SCREEN_HEIGHT / 2 + 200)
-
-    
 
             self.screen.blit(self.play_button.image, self.play_button.rect)
             self.screen.blit(self.quit_button.image, self.quit_button.rect)
@@ -123,27 +122,26 @@ class Game:
             # Pool Events
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    running = False
+                    self.quit()
                 
                 if self.play_button.is_clicked(event):
-                    game.game()
+                    self.game()
 
                 if self.quit_button.is_clicked(event):
-                    running = False
+                    self.quit()
 
             pygame.display.flip()
             self.clock.tick(60)
 
         
     def game(self):
-        running = True
-        while running:
+        while True:
             self.screen.fill((0, 0, 0))
 
             # Pool Events
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    running = False
+                    self.quit()
 
                 self.handle_card_events(event)
                 self.handle_button_events(event)
