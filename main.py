@@ -42,10 +42,10 @@ class Game:
 
     # Drawing
     def draw(self):
-        if self.enemy.live:
+        if self.enemy.hp > 0:
             self.screen.blit(self.enemy.image, self.enemy.rect)
-        
-        if self.player.live:
+
+        if self.player.hp > 0:
             self.screen.blit(self.player.image, self.player.rect)
 
         if self.player.turn:
@@ -74,13 +74,16 @@ class Game:
             if self.hand.select_card():
                 released_card = self.hand.release_card()
                 if released_card:
-                    if released_card.rect.colliderect(self.player.rect) and self.player.live:
+                    if released_card.rect.colliderect(self.player.rect) and self.player.hp > 0:
                         self.apply_card_effects(released_card, self.player)
-                    elif released_card.rect.colliderect(self.enemy.rect) and self.enemy.live:
+                    elif released_card.rect.colliderect(self.enemy.rect) and self.enemy.hp > 0:
                         self.apply_card_effects(released_card, self.enemy)
 
 
     # Game logic
+    def apply_buff_effects(self, buff):
+        pass
+
     def apply_card_effects(self, card, target):
         if card.type == "attack":
             target.hp -= 5
@@ -93,7 +96,8 @@ class Game:
         self.hand.hand_copy.remove(card)
 
     def enemy_logic(self):
-        if self.enemy.turn and self.enemy.live:
+
+        if self.enemy.turn and self.enemy.hp > 0:
             self.enemy.attack(self.player)
             self.enemy.turn = not self.enemy.turn
             self.player.turn = not self.player.turn
