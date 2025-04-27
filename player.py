@@ -13,6 +13,7 @@ class Player(pygame.sprite.Sprite):
 
         # Player Stats
         self.hp = 100
+        self.current_hp = 100
         self.armor = 0
 
     def adjust_player_position(self, screen_height):
