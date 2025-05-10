@@ -43,22 +43,21 @@ class Game:
     # Drawing the screen
     def draw(self):
 
-        # Draw player hp and enemy hp
-        self.draw_text(f"HP {self.player.current_hp} / {self.player.hp}", self.font, "red", self.screen, self.player.rect.x, self.player.rect.y + self.player.rect.height + 25)
-        self.draw_text(f"HP {self.enemy.current_hp} / {self.enemy.hp}", self.font, "red", self.screen, self.enemy.rect.x, self.enemy.rect.y + self.player.rect.height + 25)
-
         if self.player.armor > 0:
             self.draw_text(f"Armor: {self.player.armor}", self.font, "blue", self.screen, self.player.rect.x, self.player.rect.y + self.player.rect.height + 60)
         elif self.enemy.armor > 0:
             self.draw_text(f"Armor: {self.enemy.armor}", self.font, "blue", self.screen, self.enemy.rect.x, self.enemy.rect.y + self.enemy.rect.height + 60)
 
-        if self.enemy.hp > 0:
+        if self.enemy.current_hp > 0:
             # Next stage
             self.screen.blit(self.enemy.image, self.enemy.rect)
+            self.draw_text(f"HP {self.enemy.current_hp} / {self.enemy.hp}", self.font, "red", self.screen, self.enemy.rect.x, self.enemy.rect.y + self.player.rect.height + 25)
 
         if self.player.current_hp > 0:
             # End game
             self.screen.blit(self.player.image, self.player.rect)
+            self.draw_text(f"HP {self.player.current_hp} / {self.player.hp}", self.font, "red", self.screen, self.player.rect.x, self.player.rect.y + self.player.rect.height + 25)
+
 
         self.hand.draw(self.screen, self.SCREEN_WIDTH) # Draw the cards to screen
             
